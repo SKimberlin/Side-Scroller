@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 
-class ScriptComponent : Component
+class ScriptComponent : public Component
 {
 
 	virtual void OnCollisionEnter() {};

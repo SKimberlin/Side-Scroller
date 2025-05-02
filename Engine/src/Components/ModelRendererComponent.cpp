@@ -2,16 +2,17 @@
 #include "GameObject.h"
 #include "TransformComponent.h"
 #include "raymath.h"
+#include "ModelManager.h"
 
-void ModelRendererComponent::LoadModelFromFile(const std::string& fileName)
+void ModelRendererComponent::OnStart()
 {
-	m_Model = new Model(LoadModel(fileName.c_str()));
+	m_Model = ModelManager::Instance().LoadModel(m_ModelName);
+	RendererComponent::OnStart();
 }
 
-void ModelRendererComponent::LoadTextureFromFile(const std::string& fileName)
+void ModelRendererComponent::SetModelFile(const std::string& fileName)
 {
-	m_Texture = new Texture2D(LoadTexture(fileName.c_str()));
-	if (m_Model) m_Model->materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = (*m_Texture);
+	m_ModelName = fileName;
 }
 
 void ModelRendererComponent::OnUpdate()
@@ -19,15 +20,35 @@ void ModelRendererComponent::OnUpdate()
 
 }
 
-void ModelRendererComponent::OnDraw() 
+void ModelRendererComponent::OnDraw()
 {
-	if (!m_Model || !m_GameObject) return;
+    if (!m_Model || !m_GameObject) return;
 
-	auto* transform = m_GameObject->GetComponent<TransformComponent>();
-	if (!transform) return;
+    auto* transform = m_GameObject->GetComponent<TransformComponent>();
+    if (!transform) return;
 
-	DrawModelEx(*m_Model, transform->GetTranslation(), Vector3{0}, 0.0f, transform->GetScale(), WHITE);
-	DrawSphere(transform->GetTranslation(), 0.2f, GREEN);
+    Quaternion q = transform->GetRotation();
+    float angle = 2.0f * acosf(q.w);
+    float sinHalfAngle = sqrtf(1.0f - q.w * q.w);
 
+    Vector3 axis;
+    if (sinHalfAngle < 0.001f)
+    {
+        axis = Vector3{ 0.0f, 1.0f, 0.0f };
+    }
+    else
+    {
+        axis.x = q.x / sinHalfAngle;
+        axis.y = q.y / sinHalfAngle;
+        axis.z = q.z / sinHalfAngle;
+    }
 
+    float angleDegrees = angle * RAD2DEG;
+
+    DrawModelEx(*m_Model,
+        transform->GetTranslation(),
+        axis,
+        angleDegrees,
+        m_ModelScale,
+        WHITE);
 }

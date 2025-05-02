@@ -1,13 +1,16 @@
 #include "Scene.h"
 #include "RendererComponent.h"
-#include "raylib.h"
 #include "GameObject.h"
 #include "CameraComponent.h"
+#include "JoltPhysicsEngine.h"
 
 void Scene::OnStart()
 {
-	m_PhysicsEngine = std::make_unique<PhysicsEngine>();
+	if (m_IsRunning) return;
+	m_PhysicsEngine = std::make_unique<JoltPhysicsEngine>();
 	m_PhysicsEngine->Initialize();
+	m_PhysicsEngine->SetGravity({ 0, -9.81, 0 });
+	m_PhysicsEngine->StartSimulation();
 	m_Renderers.clear();
 	for (auto gameObject = m_GameObjects.begin(); gameObject != m_GameObjects.end(); ((*gameObject)->m_IsDestroyed) ? m_GameObjects.erase(gameObject) : ++gameObject)
 	{
@@ -15,6 +18,7 @@ void Scene::OnStart()
 	}
 
 	SetMainCamera();
+	m_IsRunning = true;
 }
 
 void Scene::OnUpdate()
@@ -41,7 +45,6 @@ void Scene::AddGameObject(std::shared_ptr<GameObject> gameObject)
 
 void Scene::OnDraw()
 {
-	BeginDrawing();
 	BeginMode3D(m_CurrentCamera->camera);
 	ClearBackground(BLACK);
 
@@ -50,8 +53,6 @@ void Scene::OnDraw()
 		if ((*renderer)->m_IsActive) (*renderer)->OnDraw();
 	}
 
-
-	EndDrawing();
 	EndMode3D();
 }
 

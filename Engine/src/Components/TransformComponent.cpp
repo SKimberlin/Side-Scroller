@@ -34,6 +34,11 @@ Quaternion TransformComponent::GetRotation() const
     return m_Transform.rotation;
 }
 
+Vector3 TransformComponent::GetRotationDegrees() const
+{
+    return Vector3Scale(QuaternionToEuler(m_Transform.rotation), RAD2DEG);
+}
+
 void TransformComponent::SetTranslation(const Vector3& translation)
 {
     m_Transform.translation = translation;

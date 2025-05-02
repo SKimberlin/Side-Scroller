@@ -26,7 +26,7 @@ set(number_of_tries 0)
 while(error_code AND number_of_tries LESS 3)
   execute_process(
     COMMAND "C:/Program Files/Git/cmd/git.exe"
-            clone --no-checkout --config "advice.detachedHead=false" "https://github.com/jrouwe/JoltPhysics.git" "joltphysics-src"
+            clone --no-checkout --config "advice.detachedHead=false" "https://github.com/jrouwe/JoltPhysics" "joltphysics-src"
     WORKING_DIRECTORY "C:/Users/Seth/Desktop/Github/Side-Scroller/out/build/x64-Debug/_deps"
     RESULT_VARIABLE error_code
   )
@@ -36,7 +36,7 @@ if(number_of_tries GREATER 1)
   message(STATUS "Had to git clone more than once: ${number_of_tries} times.")
 endif()
 if(error_code)
-  message(FATAL_ERROR "Failed to clone repository: 'https://github.com/jrouwe/JoltPhysics.git'")
+  message(FATAL_ERROR "Failed to clone repository: 'https://github.com/jrouwe/JoltPhysics'")
 endif()
 
 execute_process(

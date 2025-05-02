@@ -1,19 +1,22 @@
 #include "Game.h"
 #include "raylib.h"
 #include "Scene.h"
+#include <iostream>
 
 void Game::Run()
 {
     bool quit = false;
     OnStart();
+    size_t step = 0;
     while (!quit && !WindowShouldClose())
     {
-
         OnUpdate();
         OnDraw();
+        step++;
 
         quit = IsKeyPressed(KEY_ESCAPE);
     }
+
     OnShutdown();
 }
 
@@ -24,10 +27,10 @@ void Game::OnStart()
     if (m_CurrentScene) m_CurrentScene->OnStart();
 }
 
-void Game::SetCurrentScene(std::shared_ptr<Scene> scene)
+void Game::SetCurrentScene(std::shared_ptr<Scene> scene, bool start)
 {
     m_CurrentScene = scene;
-    if (m_CurrentScene) m_CurrentScene->OnStart();
+    if (m_CurrentScene && start) m_CurrentScene->OnStart();
 }
 
 void Game::SetCurrentScene(std::string& scene)
@@ -43,7 +46,6 @@ void Game::OnUpdate()
 void Game::OnDraw()
 {
     BeginDrawing();
-    ClearBackground(RAYWHITE);
     if (m_CurrentScene) m_CurrentScene->OnDraw();
     EndDrawing();
 }

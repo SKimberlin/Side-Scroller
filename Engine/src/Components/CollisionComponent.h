@@ -1,12 +1,14 @@
 #pragma once
 #include "Component.h"
-#include "Physics.h"
+#include "IPhysicsEngine.h"
+#include <Jolt/Physics/Collision/Shape/Shape.h>
+#include <Jolt/Jolt.h>
 
 class CollisionComponent : public Component
 {
 public:
-	JPH::Shape* GetCollisionShape() const { return m_Shape; };
+	JPH::ShapeRefC GetCollisionShape() const { return m_Shape; };
 
 protected:
-	JPH::Shape* m_Shape;
+	JPH::ShapeRefC m_Shape;
 };

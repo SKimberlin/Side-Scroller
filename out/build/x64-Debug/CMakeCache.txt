@@ -168,6 +168,8 @@ CMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=/INCREMENTAL:NO
 // RELWITHDEBINFO builds.
 CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=/debug /INCREMENTAL
 
+CMAKE_MSVC_RUNTIME_LIBRARY:STRING=MultiThreaded$<$<CONFIG:Debug>:Debug>DLL
+
 //Path to a program.
 CMAKE_MT:FILEPATH=C:/Program Files (x86)/Windows Kits/10/bin/10.0.22621.0/x64/mt.exe
 
@@ -321,15 +323,6 @@ ENABLE_OBJECT_STREAM:BOOL=ON
 //Enable UndefinedBehaviorSanitizer (UBSan) for debugging
 ENABLE_UBSAN:BOOL=OFF
 
-//Value Computed by CMake
-Engine_BINARY_DIR:STATIC=C:/Users/Seth/Desktop/Github/Side-Scroller/out/build/x64-Debug/Engine
-
-//Value Computed by CMake
-Engine_IS_TOP_LEVEL:STATIC=OFF
-
-//Value Computed by CMake
-Engine_SOURCE_DIR:STATIC=C:/Users/Seth/Desktop/Github/Side-Scroller/Engine
-
 //Directory under which to collect all populated content
 FETCHCONTENT_BASE_DIR:PATH=C:/Users/Seth/Desktop/Github/Side-Scroller/out/build/x64-Debug/_deps
 
@@ -401,8 +394,18 @@ INCLUDE_EVERYTHING:BOOL=OFF
 //Enable interprocedural optimizations
 INTERPROCEDURAL_OPTIMIZATION:BOOL=ON
 
+JPH_BUILD_EXAMPLES:BOOL=OFF
+
+JPH_BUILD_TESTBED:BOOL=OFF
+
 //Which type of debug symbols to generate
 JPH_DEBUG_SYMBOL_FORMAT:STRING=
+
+JPH_ENABLE_ASSERTS:BOOL=ON
+
+JPH_INSTALL:BOOL=OFF
+
+JPH_STATIC_LIBRARY:BOOL=ON
 
 //Enable 64 bit WASM
 JPH_USE_WASM64:BOOL=OFF

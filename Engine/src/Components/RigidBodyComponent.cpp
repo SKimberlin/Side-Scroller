@@ -76,10 +76,8 @@ void RigidBodyComponent::OnStart()
     auto* transform = m_GameObject->GetComponent<TransformComponent>();
     auto* collision = m_GameObject->GetComponent<CollisionComponent>();
 
-    if (!transform || !collision)
-    {
+    if (!transform)
         return;
-    }
 
     m_BodyID = physics->CreateBody(transform, collision, this);
     m_BodyCreated = true;
@@ -94,20 +92,45 @@ void RigidBodyComponent::OnUpdate()
     if (!physics)
         return;
 
-    JPH::BodyInterface& bodyInterface = physics->GetBodyInterface();
-
-    if (!bodyInterface.IsActive(m_BodyID))
-        return;
+    JPH::BodyInterface* bodyInterface = physics->GetBodyInterface();
 
     auto* transform = m_GameObject->GetComponent<TransformComponent>();
     if (!transform)
         return;
-
+    
     JPH::RVec3 pos;
     JPH::Quat rot;
 
-    bodyInterface.GetPositionAndRotation(m_BodyID, pos, rot);
+    bodyInterface->GetPositionAndRotation(m_BodyID, pos, rot);
 
-    transform->SetTranslation({ (float)pos.GetX(), (float)pos.GetY(), (float)pos.GetZ() });
+    transform->SetTranslation({ pos.GetX(), pos.GetY(), pos.GetZ() });
     transform->SetRotation({ rot.GetX(), rot.GetY(), rot.GetZ(), rot.GetW() });
+}
+
+void RigidBodyComponent::AddForce(Vector3& force)
+{
+    if (!m_GameObject || !m_GameObject->m_Scene)
+        return;
+
+    auto physics = m_GameObject->m_Scene->GetPhysicsEngine();
+    if (!physics)
+        return;
+
+    JPH::BodyInterface* bodyInterface = physics->GetBodyInterface();
+
+    bodyInterface->AddForce(m_BodyID, { force.x, force.y, force.z });
+}
+
+void RigidBodyComponent::SetLinearVelocity(Vector3& vel)
+{
+    if (!m_GameObject || !m_GameObject->m_Scene)
+        return;
+
+    auto physics = m_GameObject->m_Scene->GetPhysicsEngine();
+    if (!physics)
+        return;
+
+    JPH::BodyInterface* bodyInterface = physics->GetBodyInterface();
+
+    bodyInterface->SetLinearVelocity(m_BodyID, { vel.x, vel.y, vel.z });
 }

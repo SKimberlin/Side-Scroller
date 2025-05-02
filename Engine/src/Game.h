@@ -10,7 +10,7 @@ class Game : public ILifeCycle
 public:
 	void Run();
 	void OnStart() override;
-	void SetCurrentScene(std::shared_ptr<Scene> scene);
+	void SetCurrentScene(std::shared_ptr<Scene> scene, bool start = false);
 	void SetCurrentScene(std::string& scene);
 	void OnUpdate() override;
 	void OnDraw();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.h"
-#include "Physics.h"
+#include "IPhysicsEngine.h"
 
 class RigidBodyComponent : public Component {
 public:
@@ -32,11 +32,15 @@ public:
     void OnStart() override;
     void OnUpdate() override;
 
+    void AddForce(class Vector3& force);
+    void SetLinearVelocity(class Vector3& vel);
+
 private:
     MotionType m_MotionType;
     float m_Mass;
     float m_LinearDamping;
     float m_AngularDamping;
+    float m_Friction;
     bool m_AffectedByGravity;
     bool m_BodyCreated;
     JPH::BodyID m_BodyID;
